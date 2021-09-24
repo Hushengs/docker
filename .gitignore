@@ -1,0 +1,4 @@
+/.idea
+/mysql/data/*
+/mysql/mysql-files/*
+/redis/data/*
