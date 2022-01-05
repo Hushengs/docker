@@ -1,32 +1,32 @@
 version: '3'
 services:
-    golang:
+    docker-golang:
         build: 
-            context: ./golang/ubuntu
+            context: ./golang/centos
             dockerfile: Dockerfile
-        container_name: golang
-        hostname: golang
+        container_name: docker-golang
+        hostname: docker-golang
         networks: 
             webserver:
                 ipv4_address: 172.52.1.2
         links:
-            - redis
-            - mysql
-            - mongodb
+            - docker-redis
+            - docker-mysql
+            - docker-mongodb
         volumes: 
             - "./admin:/wwwroot/admin"
         tty: true
-    nginx:
+    docker-nginx:
         build: 
             context: ./nginx
             dockerfile: Dockerfile
-        container_name: nginx
-        hostname: nginx
+        container_name: docker-nginx
+        hostname: docker-nginx
         networks: 
             webserver:
                 ipv4_address: 172.52.1.3
         links:
-            - golang
+            - docker-golang
         ports:
             - "80:80"
             - "8888:8888"
@@ -36,12 +36,12 @@ services:
             - "./admin:/wwwroot/admin"
             - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
             - "./nginx/conf:/etc/nginx/conf"
-    redis:
+    docker-redis:
         build: 
             context: ./redis
             dockerfile: Dockerfile
-        container_name: redis
-        hostname: redis
+        container_name: docker-redis
+        hostname: docker-redis
         logging:
             driver: none
         ports:
@@ -52,12 +52,12 @@ services:
         volumes:
             - ./redis/conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
             - ./redis/data/redis/:/data
-    mongodb:
+    docker-mongodb:
         build: 
             context: ./mongodb
             dockerfile: Dockerfile
-        container_name: mongodb
-        hostname: mongodb
+        container_name: docker-mongodb
+        hostname: docker-mongodb
         logging:
             driver: none
         environment:
@@ -68,12 +68,12 @@ services:
         networks:
             webserver:
                 ipv4_address: 172.52.1.5
-    mysql:
+    docker-mysql:
         build: 
             context: ./mysql
             dockerfile: Dockerfile
-        container_name: mysql
-        hostname: mysql
+        container_name: docker-mysql
+        hostname: docker-mysql
         networks: 
             webserver:
                 ipv4_address: 172.52.1.6
